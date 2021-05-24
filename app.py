@@ -1,9 +1,3 @@
-#import streamlit as st
-#import pandas as pd
-#import numpy as np
-#import datetime
-
-#st.write("Hello, Heroku! Test Deployment")
 import streamlit as st
 # To make things easier later, we're also importing numpy and pandas for
 # working with sample data.
@@ -12,24 +6,35 @@ import pandas as pd
 
 import datetime
 st.title('SIP Calculator')
+store = pd.DataFrame()
+columns = []
+inputs = []
 
 # Start Date and Duration
 date = st.sidebar.date_input('start date', datetime.date(2021,1,1))
-st.write('Start Date: ', date)
+columns.append('Start Date')
+inputs.append(date)
 
 no_of_years = st.sidebar.number_input(label = 'Number of Years', step  = 1.0, min_value = 0.0, 
 max_value = 60.0, value = 10.0)
-st.write('Number of Years: ', no_of_years)
+columns.append('Number of Years')
+inputs.append(no_of_years)
 
 rate_of_interest = st.sidebar.number_input(label = 'Annual Rate of Interest', step  = 0.5, 
 min_value = 0.0, max_value = 25.0, value = 12.0)
-st.write('Annual Rate of Interest: ', rate_of_interest)
-st.write('Monthly Rate of Interest: ', rate_of_interest/12)
+columns.append('Annual Rate of Interest')
+inputs.append(rate_of_interest)
+columns.append('Monthly Rate of Interest')
+inputs.append(rate_of_interest/12)
 
 # Monthly Investment
 monthly_amt = st.sidebar.number_input(label = 'Monthly Investment', step  = 500.0, 
 min_value = 500.0, max_value = 75000.0, value = 2000.0)
-st.write('Monthly Investment: ', monthly_amt)
+columns.append('Monthly Investment')
+inputs.append(monthly_amt)
+
+store[' '] = columns
+store['Value you set'] = inputs
 
 # Execute Code
 n_records = no_of_years * 12
@@ -48,7 +53,7 @@ for index, row in data.iterrows():
     data.loc[index, 'amount'] = amt
     principal = amt + monthly_amt
 
-date = pd.to_datetime(datetime.date(2021,1,1))
+#date = pd.to_datetime(datetime.date(2021,1,1))
 dates = pd.date_range(start = date, periods = n_records, freq = 'M')
 #data['date'] = pd.to_datetime(dates, format = '%Y-%m ')
 data['date'] = dates
@@ -65,7 +70,16 @@ disp[['Net Investment', 'Amount']] = disp[['Net Investment', 'Amount']].astype(i
 ungp = disp.copy()
 disp['Date'] = disp['Date'].dt.strftime('%Y-%m')
 #disp['Date'] = disp['Date'].astype(str)
-st.write(disp)
 
+
+#col1, col2 = st.beta_columns(2)
+#col1.write(store)
+#col2.write(disp)
+#st.write(store)
+maturity_amount = disp['Amount'].values.flatten()[-1]
+
+col1, col2 = st.beta_columns(2)
+col1.write(disp)
+col2.write('Final Amount: \n'+ str(maturity_amount))
 ##### Plot
 st.line_chart(ungp.set_index('Date'),)
