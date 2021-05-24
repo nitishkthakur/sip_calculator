@@ -3,9 +3,6 @@ import streamlit as st
 # working with sample data.
 import numpy as np
 import pandas as pd
-import altair as alt
-import seaborn as sns
-import matplotlib.pyplot as plt
 
 import datetime
 st.title('SIP Calculator')
