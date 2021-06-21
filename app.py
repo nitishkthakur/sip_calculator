@@ -11,16 +11,21 @@ columns = []
 inputs = []
 
 # Start Date and Duration
-date = st.sidebar.date_input('start date', datetime.date(2021,1,1))
+#date = st.sidebar.date_input('start date', datetime.date(2021,1,1))
+date = st.date_input('start date', datetime.date(2021,1,1))
 columns.append('Start Date')
 inputs.append(date)
 
-no_of_years = st.sidebar.number_input(label = 'Number of Years', step  = 1.0, min_value = 0.0, 
+#no_of_years = st.sidebar.number_input(label = 'Number of Years', step  = 1.0, min_value = 0.0, 
+#max_value = 60.0, value = 10.0)
+no_of_years = st.number_input(label = 'Number of Years', step  = 1.0, min_value = 0.0, 
 max_value = 60.0, value = 10.0)
 columns.append('Number of Years')
 inputs.append(no_of_years)
 
-rate_of_interest = st.sidebar.number_input(label = 'Annual Rate of Interest', step  = 0.5, 
+#rate_of_interest = st.sidebar.number_input(label = 'Annual Rate of Interest', step  = 0.5, 
+#min_value = 0.0, max_value = 25.0, value = 12.0)
+rate_of_interest = st.number_input(label = 'Annual Rate of Interest', step  = 0.5, 
 min_value = 0.0, max_value = 25.0, value = 12.0)
 columns.append('Annual Rate of Interest')
 inputs.append(rate_of_interest)
@@ -28,7 +33,9 @@ columns.append('Monthly Rate of Interest')
 inputs.append(rate_of_interest/12)
 
 # Monthly Investment
-monthly_amt = st.sidebar.number_input(label = 'Monthly Investment', step  = 500.0, 
+#monthly_amt = st.sidebar.number_input(label = 'Monthly Investment', step  = 500.0, 
+#min_value = 500.0, max_value = 75000.0, value = 2000.0)
+monthly_amt = st.number_input(label = 'Monthly Investment', step  = 500.0, 
 min_value = 500.0, max_value = 75000.0, value = 2000.0)
 columns.append('Monthly Investment')
 inputs.append(monthly_amt)
@@ -77,9 +84,10 @@ disp['Date'] = disp['Date'].dt.strftime('%Y-%m')
 #col2.write(disp)
 #st.write(store)
 maturity_amount = disp['Amount'].values.flatten()[-1]
-
+st.write('Here is how your investment increases over time - on a monthly basis')
 col1, col2 = st.beta_columns(2)
 col1.write(disp)
 col2.write('Final Amount: \n'+ str(maturity_amount))
 ##### Plot
+st.write('Here is a chart showing the amount invested by you and the return you get after investment - over time')
 st.line_chart(ungp.set_index('Date'),)
